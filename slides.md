@@ -3,6 +3,9 @@ theme: bricks
 background: https://source.unsplash.com/collection/94734566/1920x1080
 layout: cover
 title: Newton の前進・後退差分公式
+fonts:
+  sans: 'Noto Sans JP'
+  serif: 'Noto Serif JP'
 css: tailwind
 ---
 
@@ -22,8 +25,30 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 なお，Newton 補間公式と Lagrange 補間公式の結果が同じであることは，$n$ 個の点を通る $n-1$ 次多項式は一意に定まることから分かる．
 
-ここで，分割幅が等間隔の場合，すなわち $x_i = x_0 + ih$，$f_i = f(x_0 + ih)$ のとき，Newton の差分公式を単純化できることを紹介する．
+ここで，<span class="bg-yellow-300">分割幅が等間隔</span>の場合，すなわち $x_i = x_0 + ih$，$f_i = f(x_0 + ih)$ のとき，Newton 補間公式を単純化できることを紹介する．
 
+<!--
+点を追加するのは最後の例で扱う．x_i は h ずつ増える．
+-->
+
+---
+
+## Newton 差分商補間公式（復習）
+
+$$
+\begin{aligned}
+p_0(x) &= f_0 \\
+p_1(x) &= f_0 + (x-x_0) f[x_0,x_1] \\
+p_2(x) &= f_0 + (x-x_0) f[x_0,x_1] + (x-x_0)(x-x_1)f[x_0,x_1,x_2] \\
+&\vdots \\
+p_n(x) &= f_0 + (x-x_0) f[x_0,x_1] + (x-x_0)(x-x_1)f[x_0,x_1,x_2] \\
+& \qquad + \dots + (x-x_0)(x-x_1) \cdots (x-x_{n-1}) f[x_0,x_1,\dots,x_n].
+\end{aligned}
+$$
+
+<!--
+p_n は p_{n-1} にこいつを足すだけで求まる．
+-->
 
 ---
 
@@ -37,7 +62,7 @@ $$
 $$
 \Delta^2 f(x) = \Delta (\Delta f(x)) = \Delta f(x+h) - \Delta f(x)
 $$
-と表せ，これを繰り返すと $m$ 次の前進差分は次のように再帰的に定義される．
+と表せ，これを繰り返すと **$m$ 次の前進差分**は次のように再帰的に定義される．
 $$
 \Delta^m f(x) = \Delta (\Delta^{m-1} f(x)) = \Delta^{m-1} f(x+h) - \Delta^{m-1} f(x).
 $$
@@ -79,6 +104,9 @@ f[x_0,\dots,x_{n+1}]
 $$
 となり，$m=n+1$ でも成立する．よって $(1)$ が示された．
 
+<!--
+２行目，スタートが+hされていて数はn個なので，
+-->
 
 ---
 
@@ -114,7 +142,7 @@ $$
 
 ## Newton の前進差分補間公式
 
-$(1)$ より，Newton 差分商補間公式は以下の Newton の前進差分公式になる．<span class="bg-yellow-300">$x_i = x_0 + ih$ に注意する．</span>
+$(1)$ より，Newton 差分商補間公式は以下の **Newton の前進差分補間公式**になる．<span class="bg-yellow-300">$x_i = x_0 + ih$ に注意する．</span>
 
 $$
 \begin{aligned}
@@ -126,7 +154,7 @@ $$
 $$
 
 <!--
-離散版 Tayler 展開
+x_0+\alpha h は結果がきれいになるからそう置いた．最終的には \alpha が変数．後で例で扱う．離散版 Tayler 展開とも呼ばれている．
 -->
 
 ---
@@ -141,10 +169,11 @@ $$
 $$
 \nabla^2 f(x) = \nabla (\nabla f(x)) = \nabla f(x) - \nabla f(x-h)
 $$
-と表せ，これを繰り返すと $m$ 次の後退差分は次のように再帰的に定義される．
+と表せ，これを繰り返すと **$m$ 次の後退差分**は次のように再帰的に定義される．
 $$
 \nabla^m f(x) = \nabla (\nabla^{m-1} f(x)) = \nabla^{m-1} f(x) - \nabla^{m-1} f(x-h).
 $$
+
 
 ---
 
@@ -158,12 +187,15 @@ $$
 
 前進差分の時と同様に数学的帰納法で示せるためここでは省略する．
 
+<!--
+一応m=1で確認しとく？
+-->
 
 ---
 
 ## Newton の後退差分補間公式
 
-前進差分と同様に後退差分でも補間公式を作ることができ，以下のようになる．<span class="bg-yellow-300">$x_i = x_n - ih$ に注意する．</span>
+前進差分と同様に **Newton の後退差分補間公式**を作ることができ，以下のようになる．<span class="bg-yellow-300">$x_{n-i} = x_n - ih$ に注意する．</span>
 
 $$
 \begin{aligned}
@@ -175,6 +207,7 @@ $$
 &\qquad + \dots + (-1)^n\frac{-\alpha(-\alpha-1)\cdots(-\alpha-n+1)}{n!}\nabla^nf_n \\
 &= \color{red}{\sum_{j=0}^n(-1)^j\binom{-\alpha}{j}\nabla^jf_n}
 \end{aligned}
+
 
 ---
 
@@ -194,6 +227,7 @@ x_i & f_i & \text{1次} & \text{2次} & \text{3次} \\
 3 & 8
 \end{array}
 $$
+
 
 ---
 
@@ -221,6 +255,9 @@ p_3(x)
 &= \red{-\frac{1}{3}x+3x^2-\frac23x^3}.
 \end{aligned}
 
+<!--
+赤いところ，ないしは-4を求めるには３角形すべて求める必要がある．
+-->
 
 ---
 
@@ -277,6 +314,10 @@ p_4(x)
 &= \red{-\frac{11}{6}x+\frac{23}{4}x^2-\frac{13}{6}x^3+\frac{x^4}{4}}.
 \end{aligned}
 $$
+
+<!--
+x=-1 とかを追加するなら後退差分の方が良い．逐次追加していくなら一番下のデータだけ持っておけば良い．
+-->
 
 ---
 
