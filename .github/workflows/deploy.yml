@@ -1,40 +1,20 @@
 name: Deploy pages
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-    types:
-      - closed
+on: push
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: '14'
       - name: Install dependencies
         run: npm install
       - name: Build
         run: npm run build
-
-      - name: Upload
-        uses: actions/upload-pages-artifact@v2
+      - name: Deploy pages
+        uses: crazy-max/ghaction-github-pages@v2
         with:
-          path: dist
-
-  deploy:
-    if: github.event.pull_request.merged == true || github.event_name == 'push'
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
